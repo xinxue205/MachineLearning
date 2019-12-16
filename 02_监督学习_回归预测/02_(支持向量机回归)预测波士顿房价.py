@@ -1,9 +1,16 @@
 from sklearn.datasets import load_boston
-from sklearn.cross_validation import train_test_split
+#原来的验证器
+#from sklearn.cross_validation import train_test_split
+
+#新验证器
+from sklearn.model_selection import KFold
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+from sklearn.externals import joblib
 import numpy as np
+import time
 
 # 博文：http://www.cnblogs.com/Lin-Yi/p/8971845.html
 
@@ -35,21 +42,26 @@ y_train = ss_y.fit_transform(y_train.reshape(-1, 1))
 y_test = ss_y.transform(y_test.reshape(-1, 1))
 
 # 4.1 支持向量机模型进行学习和预测
-# 线性核函数配置支持向量机
+# 线性核函数预测评估
+# 线性核函数配置支持向量机并预测
+'''
 linear_svr = SVR(kernel="linear")
-# 训练
 linear_svr.fit(x_train, y_train)
-# 预测 保存预测结果
+
+# 保存模型
+mdhms = time.strftime('%d%H%M', time.localtime(time.time()))
+file = 'svm.joblib' + '_' + mdhms
+print("保存模型文件："+file)
+joblib.dump(linear_svr,file)
+'''
+
+# 加载模型
+linear_svr = joblib.load('svm.joblib_161508')
+
+
+# 模型预测
 linear_svr_y_predict = linear_svr.predict(x_test)
 
-# 多项式核函数配置支持向量机
-poly_svr = SVR(kernel="poly")
-# 训练
-poly_svr.fit(x_train, y_train)
-# 预测 保存预测结果
-poly_svr_y_predict = linear_svr.predict(x_test)
-
-# 5 模型评估
 # 线性核函数 模型评估
 print("线性核函数支持向量机的默认评估值为：", linear_svr.score(x_test, y_test))
 print("线性核函数支持向量机的R_squared值为：", r2_score(y_test, linear_svr_y_predict))
@@ -57,7 +69,15 @@ print("线性核函数支持向量机的均方误差为:", mean_squared_error(ss
                                               ss_y.inverse_transform(linear_svr_y_predict)))
 print("线性核函数支持向量机的平均绝对误差为:", mean_absolute_error(ss_y.inverse_transform(y_test),
                                                  ss_y.inverse_transform(linear_svr_y_predict)))
-# 对多项式核函数模型评估
+
+'''
+# 多项式核函数预测评估
+# 多项式核函数配置支持向量机
+poly_svr = SVR(kernel="poly")
+# 训练
+poly_svr.fit(x_train, y_train)
+# 预测 保存预测结果
+poly_svr_y_predict = poly_svr.predict(x_test)
 print("对多项式核函数的默认评估值为：", poly_svr.score(x_test, y_test))
 print("对多项式核函数的R_squared值为：", r2_score(y_test, poly_svr_y_predict))
 print("对多项式核函数的均方误差为:", mean_squared_error(ss_y.inverse_transform(y_test),
@@ -65,7 +85,7 @@ print("对多项式核函数的均方误差为:", mean_squared_error(ss_y.invers
 print("对多项式核函数的平均绝对误差为:", mean_absolute_error(ss_y.inverse_transform(y_test),
                                               ss_y.inverse_transform(poly_svr_y_predict)))
 
-'''
+
 线性核函数支持向量机的默认评估值为： 0.651717097429608
 线性核函数支持向量机的R_squared值为： 0.651717097429608
 线性核函数支持向量机的均方误差为: 27.0063071393243
