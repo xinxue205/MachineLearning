@@ -44,7 +44,6 @@ y_test = ss_y.transform(y_test.reshape(-1, 1))
 # 4.1 支持向量机模型进行学习和预测
 # 线性核函数预测评估
 # 线性核函数配置支持向量机并预测
-'''
 linear_svr = SVR(kernel="linear")
 linear_svr.fit(x_train, y_train)
 
@@ -53,10 +52,9 @@ mdhms = time.strftime('%d%H%M', time.localtime(time.time()))
 file = 'svm.joblib' + '_' + mdhms
 print("保存模型文件："+file)
 joblib.dump(linear_svr,file)
-'''
 
 # 加载模型
-linear_svr = joblib.load('svm.joblib_161508')
+#linear_svr = joblib.load('svm.joblib_161508')
 
 
 # 模型预测
