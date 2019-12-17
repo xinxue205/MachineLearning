@@ -49,7 +49,7 @@ linear_svr.fit(x_train, y_train)
 
 # 保存模型
 mdhms = time.strftime('%d%H%M', time.localtime(time.time()))
-file = 'svm.joblib' + '_' + mdhms
+file = 'joblib' + '_' + mdhms + '.mdp'
 print("保存模型文件："+file)
 joblib.dump(linear_svr,file)
 
